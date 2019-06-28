@@ -16,8 +16,11 @@ class robot:
 		self.vy = 0.0 ## current y velocity
 		self.theta = 0.0 ## current angle
 		self.maxV = maxV
+		self.neighbours = 0
 
-		self.s_size = 5*n ## size of sensing vector
+		self.state_size = len(self.getState())
+		self.s_size = (self.state_size+1)*n ## size of sensing vector 
+																					#	(+1 for whether the robot is present)
 		self.a_size = 2 ## size of action vector
 
 		self.s = np.zeros(self.s_size) ## sensing vector
@@ -27,18 +30,48 @@ class robot:
 		self.W = np.zeros((self.s_size, self.a_size))
 
 	def distTo(self, other):
-		return np.sqrt((self.x - other.x)*(self.x - other.x) +\
-		 (self.y - other.y)*(self.y - other.y))
+		return np.sqrt((self.x - other.x)**2 +\
+		 (self.y - other.y)**2)
+
+	def getState(self):
+		return [
+				self.x, self.y, self.vx, self.vy, self.theta
+				]
+
+	def getGenotype(self):
+		gene = np.reshape(self.W, (-1))
+		return gene
+
+	def insertSubGene(self, subgene, idx):
+		g = self.getGenotype()
+		assert idx + len(subgene) < len(g), "subgene overflow"
+
+		g[idx:(idx+len(subgene))] = subgene
+		self.W = np.reshape(g, np.shape(self.W))
+
+	def getNeighbours(self, robotList):
+		ns = robotList[:]
+		ns.sort(key = lambda x: self.distTo(x))
+		ns_r = []
+		for n in ns:
+			if self.distTo(n) <= self.r:
+				ns_r.append(n)
+		neighs = ns_r[:self.n]
+		self.neighbours = len(neighs)
+		return neighs
 
 	def calcSense(self, robotList):
 		### find closest robots
-		robotList.sort(key = lambda x: self.distTo(x))
-		for i in range(self.n):
-			self.s[i] = robotList[i].x
-			self.s[i+1] = robotList[i].y
-			self.s[i+2] = robotList[i].vx
-			self.s[i+3] = robotList[i].vy
-			self.s[i+4] = robotList[i].theta
+		#robotList.sort(key = lambda x: self.distTo(x))
+		ns = self.getNeighbours(robotList)
+		sense_size = self.state_size + 1
+		for i,r in enumerate(ns):
+			idx = i*sense_size
+			if self.distTo(r) <= self.r:
+				self.s[idx:(idx+self.state_size)] = r.getState()
+				self.s[idx+sense_size] = 1 # robot present
+			else:
+				self.s[idx:(idx+sense_size)] = [0]*sense_size # robot absent
 
 	def calcAction(self):
 		self.a = np.dot(self.s, self.W)
@@ -48,19 +81,15 @@ class robot:
 			self.a = self.a
 
 	def takeAction(self):
-		nextTheta = self.theta + self.a[0]
+		nextTheta = self.theta + self.a[0] 
 		if(nextTheta > 2*np.pi):
 			nextTheta = nextTheta - 2*np.pi
+		elif nextTheta < 0.0:
+				nextTheta += 2*np.pi
 		self.theta = nextTheta
 
 		currentV = np.sqrt(self.vx*self.vx + self.vy*self.vy)
-		nextV = currentV + self.a[1]
-
-		if(np.abs(nextV) > self.maxV):
-			if(nextV) > 0:
-				nextV = self.maxV
-			else:
-				nextV = -1.0*self.maxV
+		nextV = min(max(currentV + self.a[1], -self.maxV), self.maxV)
 
 		self.vx = nextV*np.cos(self.theta)
 		self.vy = nextV*np.sin(self.theta)

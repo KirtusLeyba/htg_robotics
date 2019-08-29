@@ -26,8 +26,8 @@ You will also want to make your own custom HTG Method which defines how genes ar
 
 TODO features:
 
-1. Fitness function incorporation.
+1. <del> Fitness function incorporation. </del>
 2. Recording/Saving data for gene transfers (see 'DataMethods.py').
-3. Fitness-dependent gene-transfer.
+3. <del> Fitness-dependent gene-transfer. </del>
 4. Fitness-proportional gene-selection (see 'HTGmethods.py').
 5. It's very inefficient in python to have each robot be its own class object if we want to perform operations on groups of individuals. Create a population class which tracks the parameters of the population in vectors to make use on NumPy.

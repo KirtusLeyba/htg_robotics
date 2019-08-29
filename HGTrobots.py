@@ -54,7 +54,7 @@ class robot:
                 self.pos_x / self.boundary_x, 
                 self.pos_y / self.boundary_y, 
                 # TODO: normalise the below
-                self.vel_x, self.vel_y, self.angle
+                self.vel_x / self.max_vel, self.vel_y / self.max_vel, self.angle
                 ]
 
     def getGenotype(self):
@@ -71,7 +71,7 @@ class robot:
         #print('before', g)
 
         # mutate the subgene slightly.
-        subgene += np.random.randn() * 0.001
+        subgene = np.clip(subgene + np.random.randn() * 0.01, -2.0, 2.0)
 
         g[idx:(idx+len(subgene))] = subgene
         #print('after', g)
@@ -101,7 +101,11 @@ class robot:
             idx = i*sense_size
             #if self.distTo(r) <= self.sense_radius:
             #TODO: make the sensing relative to the robot and not world coords.
-            self.sensors[idx:(idx+self.state_size)] = r.getState()
+            # make the pos relative to my pos.
+            rstate = r.getState()
+            #rstate[0] -= self.pos_x / self.boundary_x
+            #rstate[1] -= self.pos_y / self.boundary_y
+            self.sensors[idx:(idx+self.state_size)] = rstate
             self.sensors[idx+sense_size-1] = 1 # robot present
             #else:
             #    self.sensors[idx:(idx+sense_size)] = [0]*sense_size # robot absent

@@ -1,9 +1,7 @@
 from HTGmanager import HtgManager
-from HTGmethods import selectGSCrandLength
+from HTGmethods import selectGSCrandLength, selectAll
+from Task import TaskClump
 from DataMethods import DataRecorder
-import matplotlib.pyplot as plt
-from matplotlib import animation
-from IPython.display import HTML
 import numpy as np
 
 from dataDisplay import DataDisplay
@@ -26,6 +24,8 @@ class PetriDish:
                 'act_rate':         1, # TODO convert from timesteps to secs.
                 },
             htg_method=lambda x: selectGSCrandLength(x, min_length=2, max_length=4),
+            task=TaskClump(0, 100),
+            fitness_selection_method=selectAll,
             visuals = {
                 'colour_A'      : [100.0, 100.0, 100.0],
                 'colour_B'      : [0.0, 225.0, 0.0],
@@ -75,6 +75,8 @@ class PetriDish:
         self.mng = HtgManager(
                 pop_size=population_size,
                 htg_method=htg_method,
+                task=task,
+                fitness_selection_method=fitness_selection_method,
                 boundary_x=size[0],
                 boundary_y=size[1],
                 max_vel=robot_data['max_velocity'],
@@ -147,6 +149,11 @@ class PetriDish:
         while not done:
            self.__tick__() 
 
+
+        # a final save.
+        self.data_recorder.add_population_tick(self.mng.pop)
+        self.data_recorder.save_population_history(self.save_filename)
+
         pygame.quit()
 
     def __tick__(self):
@@ -211,6 +218,7 @@ class PetriDish:
         # freeze iteration counter.
         if not self.pause_button.on:
             self.iters += 1
+
 
     def __draw__(self):
 

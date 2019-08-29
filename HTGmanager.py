@@ -4,7 +4,9 @@ from HGTrobots import robot
 
 class HtgManager:
 
-    def __init__(self, pop_size, htg_method, 
+    def __init__(self, 
+            pop_size, htg_method, task,
+            fitness_selection_method,
             boundary_x=100, boundary_y=100, 
             max_vel=4.0, sense_radius=50.0,
             num_neighbours=5, diffuse_rate=10,
@@ -37,6 +39,8 @@ class HtgManager:
         self.randomisePopulation()
 
         self.htg_method = htg_method
+        self.task = task
+        self.fitness_selection_method = fitness_selection_method
 
         self.act_rate = act_rate
         self.diffuse_rate = diffuse_rate
@@ -65,24 +69,20 @@ class HtgManager:
 
     def update(self):
 
-        ### UNIT TEST for diffusion working.
-        #before_genes = []
-        #if self.iters % self.diffuse_rate == 0:
-        #    # check if diffuse worked and some changed.
-        #    for i in range(self.pop_size):
-        #        before_genes.append(self.pop[i].getGenotype())
-
         # start a new history recording.
         if self.iters % self.diffuse_rate == 0:
             self.diffuse_history.append([])
 
+        # general robot update.
         for i in range(self.pop_size):
+            # move robot.
             if self.iters % self.act_rate == 0:
                 self.pop[i].calcSense(self.pop[:])
                 self.pop[i].calcAction()
                 self.pop[i].takeAction()
-            if self.iters % self.diffuse_rate == 0:
-                self.diffuse(i)
+            # diffuse robot.
+            #if self.iters % self.diffuse_rate == 0:
+            #    self.diffuse(i)
 
             # check if the robot is outside of the boundary:
             if self.pop[i].pos_x > self.boundary_x:
@@ -99,12 +99,19 @@ class HtgManager:
                 self.pop[i].pos_y = 0
                 self.pop[i].vel_y = abs(self.pop[i].vel_y)
 
-        ### UNIT TEST for diffusion working.
-        #if self.iters % self.diffuse_rate == 0:
-        #    # check if diffuse worked and some changed.
-        #    for i in range(self.pop_size):
-        #        same = np.all(self.pop[i].getGenotype() == before_genes[i])
-        #        print(same)
+        # compute fitness.
+        fitnesses = self.task.compute_fitness(self.pop)
+        #print(fitnesses)
+        min_fitness = np.min(fitnesses)
+        max_fitness = np.max(fitnesses)
+        avg_fitness = np.mean(fitnesses)
+        print('min: {}, max: {}, avg: {}'.format(min_fitness, max_fitness, avg_fitness))
+        # select robots to diffuse.
+        diffuse_idxs = self.fitness_selection_method(fitnesses)
+        # diffuse.
+        if self.iters % self.diffuse_rate == 0:
+            for i in diffuse_idxs:
+                self.diffuse(i)
 
         self.iters += 1
 

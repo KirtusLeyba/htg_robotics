@@ -41,6 +41,7 @@ class HtgManager:
         self.htg_method = htg_method
         self.task = task
         self.fitness_selection_method = fitness_selection_method
+        self.fitnesses = None
 
         self.act_rate = act_rate
         self.diffuse_rate = diffuse_rate
@@ -100,14 +101,14 @@ class HtgManager:
                 self.pop[i].vel_y = abs(self.pop[i].vel_y)
 
         # compute fitness.
-        fitnesses = self.task.compute_fitness(self.pop)
+        self.fitnesses = self.task.compute_fitness(self.pop)
         #print(fitnesses)
-        min_fitness = np.min(fitnesses)
-        max_fitness = np.max(fitnesses)
-        avg_fitness = np.mean(fitnesses)
+        min_fitness = np.min(self.fitnesses)
+        max_fitness = np.max(self.fitnesses)
+        avg_fitness = np.mean(self.fitnesses)
         print('min: {}, max: {}, avg: {}'.format(min_fitness, max_fitness, avg_fitness))
         # select robots to diffuse.
-        diffuse_idxs = self.fitness_selection_method(fitnesses)
+        diffuse_idxs = self.fitness_selection_method(self.fitnesses)
         # diffuse.
         if self.iters % self.diffuse_rate == 0:
             for i in diffuse_idxs:

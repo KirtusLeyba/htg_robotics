@@ -29,7 +29,7 @@ class TaskClump(Task):
                 dist_sum += dist
 
             if len(ns) > 0:
-                fitness_values[i] = 1.0 - (dist_sum / len(ns))
+                fitness_values[i] = 1.0 - (dist_sum / p.num_neighbours)
             else:
                 fitness_values[i] = self.min_fitness
 

@@ -120,6 +120,15 @@ class PetriDish:
         self.pause_button = Button('||', [15.0, size[1] - 15.0], [100.0, 100.0, 100.0], 10)
         self.up_fps = Button('>', [30.0, size[1] - 15.0], [100.0, 100.0, 100.0], 10, toggle=False)
         self.down_fps = Button('<', [2.0, size[1] - 15.0], [100.0, 100.0, 100.0], 10, toggle=False)
+        self.color_button = Button('=', [size[0] - 30.0, 7.0], [100.0, 100.0, 0.0], 15)
+        self.color_data = DataDisplay(
+                {
+                    'VIS' : 'neighb.'
+                    },
+                position=[size[0] - 55.0, 0.0], 
+                color=[100.0, 100.0, 0.0], 
+                size=14
+                )
         self.fps_data = DataDisplay(
                 {
                     'FPS' : 60,
@@ -169,6 +178,7 @@ class PetriDish:
         self.pause_button.mouse_over((mp_x, mp_y), m_down)
         self.up_fps.mouse_over((mp_x, mp_y), m_down)
         self.down_fps.mouse_over((mp_x, mp_y), m_down)
+        self.color_button.mouse_over((mp_x, mp_y), m_down)
 
         self.screen.fill(self.visuals['background'])
         
@@ -190,6 +200,11 @@ class PetriDish:
                     #self.robot_data.update_value('GENE', r.getGenotype())
                     print('ID: {}, GENE: {}'.format(r.ID, r.getGenotype()))
                     break
+
+        if not self.color_button.on:
+            self.color_data.update_value('VIS', 'neighb.')
+        else:
+            self.color_data.update_value('VIS', 'fitn.')
 
         self.fps_data.update_value('FPS', self.fps)
 
@@ -234,7 +249,13 @@ class PetriDish:
             a = r.angle
             ns = r.neighbours
             # base col
-            col = self.preset_colors[ns]
+            if self.color_button.on:
+                if self.mng.fitnesses is not None:
+                    col = (0.0, 0.0, self.mng.fitnesses[i]*255.0)
+                else:
+                    col = [0.0, 0.0, 0.0]
+            else:
+                col = self.preset_colors[ns]
             #col = [neighbs[i]/max_col*255.0, 0.0, 0.0]
             #print(col)
             # body of robot
@@ -269,4 +290,6 @@ class PetriDish:
         self.pause_button.draw(self.screen)
         self.up_fps.draw(self.screen)
         self.down_fps.draw(self.screen)
+        self.color_button.draw(self.screen)
+        self.color_data.draw(self.screen)
 

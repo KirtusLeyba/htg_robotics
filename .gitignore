@@ -1,0 +1,8 @@
+__pycache__
+__pycache__/*.pyc
+*.un*
+*.swp*
+*.pyc
+*.pyo
+outputs/*.txt
+

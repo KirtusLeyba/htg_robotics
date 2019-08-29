@@ -7,32 +7,32 @@ class robot:
 	## and state functionality as well! - Kirtus
 
 	def __init__(self, x, y, r, n):
-		self.x = x ## x floating point position
-		self.y = y ## y floating point position
-		self.r = r ## radius of sensing vector
-		self.n = n ## number of neighbors to track in sensing vector
-		self.w = 0.0 ## current angular velocity
-		self.vx = 0.0 ## current x velocity
-		self.vy = 0.0 ## current y velocity
-		self.theta = 0.0 ## current angle
+		self.pos_x = x ## x floating point position
+		self.pos_y = y ## y floating point position
+		self.sense_radius = r ## radius of sensing vector
+		self.num_neighbours = n ## number of neighbors to track in sensing vector
+		self.angular_vel = 0.0 ## current angular velocity
+		self.vel_x = 0.0 ## current x velocity
+		self.vel_y = 0.0 ## current y velocity
+		self.angle = 0.0 ## current angle
 
-		self.s_size = 3*n ## size of sensing vector
-		self.a_size = 3 ## size of action vector
+		self.sensor_size = 3*n ## size of sensing vector
+		self.action_size = 3 ## size of action vector
 
-		self.s = np.zeros(s_size) ## sensing vector
-		self.a = np.zeros(a_size) ## action vector
+		self.sensors = np.zeros(s_size) ## sensing vector
+		self.actions = np.zeros(a_size) ## action vector
 
 		## Weights
-		self.W = np.zeros((self.s_size, self.a_size))
+		self.weights = np.zeros((self.s_size, self.a_size))
 
 	def calcAction(self):
-		self.a = self.W*self.s
+		self.actions = np.dot(self.sensors, self.weights)
 
 	def __hash__(self):
-		return hash(str(self.x) + \
-			"," + str(self.y) + \
-			"," + str(self.s) + \
-			"," + str(self.r))
+		return hash(str(self.pos_x) + \
+			"," + str(self.pos_y) + \
+			"," + str(self.sensors) + \
+			"," + str(self.sense_radius))
 
 	def __eq__(self, other):
 		if(hash(self) == hash(other)):

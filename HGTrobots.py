@@ -71,7 +71,7 @@ class robot:
         #print('before', g)
 
         # mutate the subgene slightly.
-        subgene = np.clip(subgene + np.random.randn() * 0.01, -2.0, 2.0)
+       # subgene = np.clip(subgene + np.random.randn() * 0.01, -2.0, 2.0)
 
         g[idx:(idx+len(subgene))] = subgene
         #print('after', g)

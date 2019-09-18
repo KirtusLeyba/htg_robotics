@@ -1,5 +1,5 @@
 from HTGmanager import HtgManager
-from HTGmethods import selectGSCrandLength, selectAll
+from HTGmethods import selectGSCrandLength, selectAll, flatMutate
 from Task import TaskClump
 from DataMethods import DataRecorder
 import numpy as np
@@ -26,6 +26,7 @@ class PetriDish:
             htg_method=lambda x: selectGSCrandLength(x, min_length=2, max_length=4),
             task=TaskClump(0, 100),
             fitness_selection_method=selectAll,
+            mutate_method = lambda x: flatMutate(x, 0.1),
             visuals = {
                 'colour_A'      : [100.0, 100.0, 100.0],
                 'colour_B'      : [0.0, 225.0, 0.0],
@@ -77,6 +78,7 @@ class PetriDish:
                 htg_method=htg_method,
                 task=task,
                 fitness_selection_method=fitness_selection_method,
+                mutate_method= lambda x: flatMutate(x, 0.1),
                 boundary_x=size[0],
                 boundary_y=size[1],
                 max_vel=robot_data['max_velocity'],
@@ -251,7 +253,10 @@ class PetriDish:
             # base col
             if self.color_button.on:
                 if self.mng.fitnesses is not None:
-                    col = (0.0, 0.0, self.mng.fitnesses[i]*255.0)
+                    if(self.mng.fitnesses[i] >= 0.0):
+                        col = (0.0, 0.0, self.mng.fitnesses[i]*255.0)
+                    else:
+                        col = [0.0, 0.0, 0.0]
                 else:
                     col = [0.0, 0.0, 0.0]
             else:

@@ -36,3 +36,41 @@ class TaskClump(Task):
         return fitness_values
 
 
+class TaskClumpAtPosition(Task):
+    '''
+    A simple task where all agents have to go to one point, defined globally (!!!).
+    '''
+
+    def __init__(self, min_fitness, max_fitness):
+        super().__init__(min_fitness, max_fitness)
+
+    def compute_fitness(self, population):
+        fitness_values = [self.min_fitness]*len(population)
+
+        # TODO: until we make a population class instead of a robot class, this will be slow.
+        for i,p in enumerate(population):
+
+            dist = (abs(p.pos_x - 200.0) + abs(p.pos_y - 150.0))
+            fitness_values[i] = 1.0 - dist/self.max_fitness
+
+        return fitness_values
+
+class TaskMaxNeighbors(Task):
+    '''
+    Try to maximize your neighborhood
+    '''
+
+    def __init__(self, min_fitness, max_fitness):
+        super().__init__(min_fitness, max_fitness)
+
+    def compute_fitness(self, population):
+        fitness_values = [self.min_fitness]*len(population)
+
+        # TODO: until we make a population class instead of a robot class, this will be slow.
+        for i,p in enumerate(population):
+
+            fitness_values[i] = len(p.getNeighbours(population))/self.max_fitness
+
+        return fitness_values
+
+

@@ -25,3 +25,22 @@ def selectTopN(fitnesses, top_n):
 def selectAll(fitnesses):
     return np.arange(len(fitnesses))
 
+def selectProportional(fitnesses):
+	selected = []
+	i = 0
+	for f in fitnesses:
+		roll = np.random.random()
+		if(roll < f):
+			selected.append(i)
+		i += 1
+	return np.array(selected)
+
+"""
+Mutation methods
+"""
+
+def flatMutate(genes, m):
+	for i in range(len(genes)):
+		if(np.random.random() < m):
+			genes[i] = np.random.random()*2.0 - 2.0
+	return genes

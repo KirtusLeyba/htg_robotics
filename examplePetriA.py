@@ -1,6 +1,6 @@
 from PetriDish import PetriDish
-from HTGmethods import selectGSCrandLength, selectAll, selectTopN
-from Task import TaskClump
+from HTGmethods import selectGSCrandLength, selectAll, selectTopN, selectProportional, flatMutate
+from Task import TaskClump, TaskClumpAtPosition, TaskMaxNeighbors
 
 def run():
 
@@ -16,8 +16,9 @@ def run():
                 'act_rate':         1,
                 },
             htg_method = lambda x: selectGSCrandLength(x, min_length=2, max_length=4),
-            task = TaskClump(min_fitness=0, max_fitness=100.0),
-            fitness_selection_method = lambda x: selectTopN(x, top_n=15),
+            task = TaskMaxNeighbors(min_fitness=0, max_fitness=5),
+            fitness_selection_method = lambda x: selectProportional(x),
+            mutate_method = lambda x: flatMutate(x, 0.1),
             visuals = {
                 'colour_A'      : [100.0, 100.0, 100.0],
                 'colour_B'      : [0.0, 225.0, 0.0],

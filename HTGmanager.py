@@ -7,6 +7,7 @@ class HtgManager:
     def __init__(self, 
             pop_size, htg_method, task,
             fitness_selection_method,
+            mutate_method,
             boundary_x=100, boundary_y=100, 
             max_vel=4.0, sense_radius=50.0,
             num_neighbours=5, diffuse_rate=10,
@@ -42,6 +43,8 @@ class HtgManager:
         self.task = task
         self.fitness_selection_method = fitness_selection_method
         self.fitnesses = None
+
+        self.mutate_method = mutate_method
 
         self.act_rate = act_rate
         self.diffuse_rate = diffuse_rate
@@ -122,6 +125,7 @@ class HtgManager:
             rand_idx = np.random.randint(len(ns))
             rand_n = ns[rand_idx]
             sub_gene, sub_gene_idx = self.htg_method(self.pop[p_idx].getGenotype())
+            sub_gene = self.mutate_method(sub_gene)
             rand_n.insertSubGene(sub_gene, sub_gene_idx)
 
             self.diffuse_history[-1].append(

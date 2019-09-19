@@ -14,6 +14,7 @@ def run():
                 'sense_radius':     50.0,
                 'diffuse_rate':     10, 
                 'act_rate':         1,
+                'modular_weights':  True, #TODO: discuss with group why weights should be modular (only).
                 },
             htg_method = lambda x: selectGSCrandLength(x, min_length=2, max_length=4),
             task = TaskMaxNeighbors(min_fitness=0, max_fitness=5),

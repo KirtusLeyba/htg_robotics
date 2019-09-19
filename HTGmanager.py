@@ -11,7 +11,9 @@ class HtgManager:
             boundary_x=100, boundary_y=100, 
             max_vel=4.0, sense_radius=50.0,
             num_neighbours=5, diffuse_rate=10,
-            act_rate=1):
+            act_rate=1,
+            modular_weights=False
+            ):
         """
         boundary_x : int
             - furthest x-position.
@@ -34,6 +36,7 @@ class HtgManager:
         self.max_vel = max_vel
         self.sense_radius = sense_radius
         self.num_neighbours = num_neighbours
+        self.modular_weights = modular_weights
 
         self.pop_size = pop_size
         self.pop = []
@@ -43,6 +46,7 @@ class HtgManager:
         self.task = task
         self.fitness_selection_method = fitness_selection_method
         self.fitnesses = None
+
 
         self.mutate_method = mutate_method
 
@@ -66,7 +70,8 @@ class HtgManager:
                     maxV = self.max_vel,
                     boundary_x = self.boundary_x,
                     boundary_y = self.boundary_y,
-                    ID = p
+                    ID = p,
+                    modular_weights = self.modular_weights
                     )
             r.weights = np.random.randn(*np.shape(r.weights))
             self.pop.append(r)

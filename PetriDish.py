@@ -49,6 +49,9 @@ class PetriDish:
                         'sense_radius':     50.0,   -- radius of sensory detection.
                         'diffuse_rate':     10,     -- ticks per gene diffusion.
                         'act_rate':         1,      -- ticks per robot action.
+                        'modular_weights':  True,   -- whether the input weights for each robot sense
+                                                        are the same. Generally, this makes sense to
+                                                        keep true.
                     })
         htg_method          -- method describing how genes are selected.
         visuals             -- colours of graphics: dictionary (default:
@@ -85,7 +88,8 @@ class PetriDish:
                 sense_radius=robot_data['sense_radius'],
                 num_neighbours=robot_data['max_neighbours'],
                 diffuse_rate=robot_data['diffuse_rate'],
-                act_rate=robot_data['act_rate']
+                act_rate=robot_data['act_rate'],
+                modular_weights=robot_data['modular_weights']
                 )
 
         self.visuals = visuals

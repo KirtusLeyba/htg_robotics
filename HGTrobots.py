@@ -6,7 +6,7 @@ class robot:
     ## so the robot can only sense other robots. We need to add the environmental
     ## and state functionality as well! - Kirtus
 
-    def __init__(self, x, y, r, n, maxV, boundary_x, boundary_y, ID):
+    def __init__(self, x, y, r, n, maxV, boundary_x, boundary_y, ID, modular_weights=False):
         self.pos_x = x ## x floating point position
         self.pos_y = y ## y floating point position
         self.sense_radius = r ## radius of sensing vector
@@ -25,7 +25,8 @@ class robot:
         self.live_neighbours = 0
 
         self.state_size = len(self.getState())
-        self.sensor_size = (self.state_size+1)*n ## size of sensing vector 
+        self.sensor_size_one_robot = self.state_size + 1
+        self.sensor_size = self.sensor_size_one_robot*n ## size of sensing vector 
                                                                                                                                                                 #	(+1 for whether the robot is present)
         self.action_size = 2 ## size of action vector
 
@@ -35,8 +36,14 @@ class robot:
         self.FRICTION = 0.9
 
         ## Weights
-        self.weights = np.random.randn(self.sensor_size, self.action_size)
-        self.num_weights = self.sensor_size*self.action_size
+        self.modular_weights = modular_weights
+        if self.modular_weights:
+            # weights for each input channel are the same.
+            self.weights = np.random.randn(self.sensor_size_one_robot, self.action_size)
+        else:
+            # weights for input channels are different (doesn't make sense in this context).
+            self.weights = np.random.randn(self.sensor_size, self.action_size)
+        self.num_weights = np.shape(self.weights)[0]*np.shape(self.weights)[1]
         self.bias = np.random.randn(self.action_size)
         #print(self.weights)
 
@@ -112,7 +119,11 @@ class robot:
         #print(self.sensors)
 
     def calcAction(self):
-        self.actions = np.dot(self.sensors, self.weights) + self.bias
+        if self.modular_weights:
+            w_mod = np.tile(self.weights, (self.num_neighbours, 1))
+            self.actions = np.dot(self.sensors, w_mod) + self.bias
+        else:
+            self.actions = np.dot(self.sensors, self.weights) + self.bias
 
     def takeAction(self):
         #next_angle = self.angle + self.actions[0] 

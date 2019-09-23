@@ -63,6 +63,7 @@ class NeuralNetworkModular(NeuralNetwork):
         self.biases = [
                 np.random.randn(b*self.num_modules) for b in layers[1:-1]
                 ]
+        self.biases.append(np.random.randn(layers[-1]))
 
     def forward(self, x):
         #TODO: middle layers need to be double tiled

@@ -12,7 +12,11 @@ class HtgManager:
             max_vel=4.0, sense_radius=50.0,
             num_neighbours=5, diffuse_rate=10,
             act_rate=1,
-            modular_weights=False
+            nn_info={
+                'hidden_layers' : [],
+                'activation'    : lambda x : x,
+                'modular'       : True
+                }
             ):
         """
         boundary_x : int
@@ -36,7 +40,7 @@ class HtgManager:
         self.max_vel = max_vel
         self.sense_radius = sense_radius
         self.num_neighbours = num_neighbours
-        self.modular_weights = modular_weights
+        self.nn_info = nn_info
 
         self.pop_size = pop_size
         self.pop = []
@@ -71,7 +75,7 @@ class HtgManager:
                     boundary_x = self.boundary_x,
                     boundary_y = self.boundary_y,
                     ID = p,
-                    modular_weights = self.modular_weights
+                    nn_info = self.nn_info
                     )
             #r.weights = np.random.randn(*np.shape(r.weights))
             self.pop.append(r)

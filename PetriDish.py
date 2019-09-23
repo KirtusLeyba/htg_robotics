@@ -22,6 +22,11 @@ class PetriDish:
                 'sense_radius':     50.0,
                 'diffuse_rate':     10, # TODO convert from timesteps to secs.
                 'act_rate':         1, # TODO convert from timesteps to secs.
+                'nn_info':          {
+                                        'hidden_layers' : [],
+                                        'activation'    : lambda x : x,
+                                        'modular'       : True
+                                    }
                 },
             htg_method=lambda x: selectGSCrandLength(x, min_length=2, max_length=4),
             task=TaskClump(0, 100),
@@ -49,7 +54,12 @@ class PetriDish:
                         'sense_radius':     50.0,   -- radius of sensory detection.
                         'diffuse_rate':     10,     -- ticks per gene diffusion.
                         'act_rate':         1,      -- ticks per robot action.
-                        'modular_weights':  True,   -- whether the input weights for each robot sense
+                        nn_info : dict
+                            default: {
+                                'hidden_layers' : [],                   -- number of hidden layers (input and output are defined by default).
+                                'activation'    : lambda x : x,         -- activation function (e.g. np.tanh, ReLU, or just linear).
+                                'modular'       : True                  -- whether the weights are the same for each robots sensor channel.
+                            }
                                                         are the same. Generally, this makes sense to
                                                         keep true.
                     })
@@ -89,7 +99,7 @@ class PetriDish:
                 num_neighbours=robot_data['max_neighbours'],
                 diffuse_rate=robot_data['diffuse_rate'],
                 act_rate=robot_data['act_rate'],
-                modular_weights=robot_data['modular_weights']
+                nn_info=robot_data['nn_info']
                 )
 
         self.visuals = visuals

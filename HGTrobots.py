@@ -8,9 +8,24 @@ class robot:
     ## so the robot can only sense other robots. We need to add the environmental
     ## and state functionality as well! - Kirtus
 
+    '''
+    nn_info : dict
+        default: {
+            'hidden_layers' : [],
+            'activation'    : lambda x : x,
+            'modular'       : True
+        }
+        (in other words, just linear regression.)
+    '''
+
     def __init__(self, x, y, r, n, maxV, 
                     boundary_x, boundary_y, ID, 
-                    modular_weights=False):
+                    nn_info={
+                        'hidden_layers' : [],
+                        'activation'    : lambda x : x,
+                        'modular'       : True
+                        }
+                    ):
         self.pos_x = x ## x floating point position
         self.pos_y = y ## y floating point position
         self.sense_radius = r ## radius of sensing vector
@@ -40,7 +55,6 @@ class robot:
         self.FRICTION = 0.9
 
         ## Weights
-        self.modular_weights = modular_weights
         #if self.modular_weights:
         #    # weights for each input channel are the same.
         #    self.weights = np.random.randn(self.sensor_size_one_robot, self.action_size)
@@ -50,15 +64,23 @@ class robot:
         #self.num_weights = np.shape(self.weights)[0]*np.shape(self.weights)[1]
         #self.bias = np.random.randn(self.action_size)
 
-        self.nn = NeuralNetworkModular(
-                layers=[self.sensor_size_one_robot, 16, self.action_size],
-                num_modules=self.num_neighbours,
-                activation=np.tanh
-                )
-        #self.nn = NeuralNetwork(
-        #        layers=[self.sensor_size, 16, self.action_size],
-        #        activation=np.tanh
-        #        )
+        if nn_info['modular']:
+            layers = [self.sensor_size_one_robot]
+        else:
+            layers = [self.sensor_size]
+        layers.extend(nn_info['hidden_layers'])
+        layers.append(self.action_size)
+        if nn_info['modular']:
+            self.nn = NeuralNetworkModular(
+                    layers=layers,
+                    num_modules=self.num_neighbours,
+                    activation=nn_info['activation']
+                    )
+        else:
+            self.nn = NeuralNetwork(
+                    layers=layers,
+                    activation=nn_info['activation']
+                    )
 
         self.ID = ID
 

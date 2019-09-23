@@ -73,7 +73,7 @@ class HtgManager:
                     ID = p,
                     modular_weights = self.modular_weights
                     )
-            r.weights = np.random.randn(*np.shape(r.weights))
+            #r.weights = np.random.randn(*np.shape(r.weights))
             self.pop.append(r)
 
     def update(self):

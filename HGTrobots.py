@@ -1,12 +1,16 @@
 import numpy as np
 
+from neural_network import NeuralNetwork, NeuralNetworkModular
+
 class robot:
 
     ## TODO: So far i am only including 5*n spaces in the sensing vector,
     ## so the robot can only sense other robots. We need to add the environmental
     ## and state functionality as well! - Kirtus
 
-    def __init__(self, x, y, r, n, maxV, boundary_x, boundary_y, ID, modular_weights=False):
+    def __init__(self, x, y, r, n, maxV, 
+                    boundary_x, boundary_y, ID, 
+                    modular_weights=False):
         self.pos_x = x ## x floating point position
         self.pos_y = y ## y floating point position
         self.sense_radius = r ## radius of sensing vector
@@ -25,9 +29,9 @@ class robot:
         self.live_neighbours = 0
 
         self.state_size = len(self.getState())
-        self.sensor_size_one_robot = self.state_size + 1
+        self.sensor_size_one_robot = self.state_size + 1 # (+1 for whether the robot is present)
         self.sensor_size = self.sensor_size_one_robot*n ## size of sensing vector 
-                                                                                                                                                                #	(+1 for whether the robot is present)
+                                                                                                                            
         self.action_size = 2 ## size of action vector
 
         self.sensors = np.zeros(self.sensor_size) ## sensing vector
@@ -37,15 +41,24 @@ class robot:
 
         ## Weights
         self.modular_weights = modular_weights
-        if self.modular_weights:
-            # weights for each input channel are the same.
-            self.weights = np.random.randn(self.sensor_size_one_robot, self.action_size)
-        else:
-            # weights for input channels are different (doesn't make sense in this context).
-            self.weights = np.random.randn(self.sensor_size, self.action_size)
-        self.num_weights = np.shape(self.weights)[0]*np.shape(self.weights)[1]
-        self.bias = np.random.randn(self.action_size)
-        #print(self.weights)
+        #if self.modular_weights:
+        #    # weights for each input channel are the same.
+        #    self.weights = np.random.randn(self.sensor_size_one_robot, self.action_size)
+        #else:
+        #    # weights for input channels are different (doesn't make sense in this context).
+        #    self.weights = np.random.randn(self.sensor_size, self.action_size)
+        #self.num_weights = np.shape(self.weights)[0]*np.shape(self.weights)[1]
+        #self.bias = np.random.randn(self.action_size)
+
+        self.nn = NeuralNetworkModular(
+                layers=[self.sensor_size_one_robot, 16, self.action_size],
+                num_modules=self.num_neighbours,
+                activation=np.tanh
+                )
+        #self.nn = NeuralNetwork(
+        #        layers=[self.sensor_size, 16, self.action_size],
+        #        activation=np.tanh
+        #        )
 
         self.ID = ID
 
@@ -65,27 +78,22 @@ class robot:
                 ]
 
     def getGenotype(self):
-        gene = np.hstack(
-                (np.reshape(self.weights, (-1)),
-                    self.bias))
+        #gene = np.hstack(
+        #        (np.reshape(self.weights, (-1)),
+        #            self.bias))
+        gene = self.nn.getGenotype()
         return gene
 
     def insertSubGene(self, subgene, idx):
-        g = self.getGenotype()
-        assert idx + len(subgene) < len(g), "subgene overflow"
+        #g = self.getGenotype()
+        #assert idx + len(subgene) < len(g), "subgene overflow"
 
-        #print('---INSERTION!!! {} at {}'.format(subgene, idx))
-        #print('before', g)
-
-        # mutate the subgene slightly.
-       # subgene = np.clip(subgene + np.random.randn() * 0.01, -2.0, 2.0)
-
-        g[idx:(idx+len(subgene))] = subgene
-        #print('after', g)
-        w_section = g[:self.num_weights]
-        b_section = g[self.num_weights:]
-        self.weights = np.reshape(w_section, np.shape(self.weights))
-        self.bias = np.reshape(b_section, np.shape(self.bias))
+        #g[idx:(idx+len(subgene))] = subgene
+        #w_section = g[:self.num_weights]
+        #b_section = g[self.num_weights:]
+        #self.weights = np.reshape(w_section, np.shape(self.weights))
+        #self.bias = np.reshape(b_section, np.shape(self.bias))
+        self.nn.insertSubGene(subgene, idx)
 
     def getNeighbours(self, robotList):
         ns = robotList[:]
@@ -119,11 +127,12 @@ class robot:
         #print(self.sensors)
 
     def calcAction(self):
-        if self.modular_weights:
-            w_mod = np.tile(self.weights, (self.num_neighbours, 1))
-            self.actions = np.dot(self.sensors, w_mod) + self.bias
-        else:
-            self.actions = np.dot(self.sensors, self.weights) + self.bias
+        self.actions = self.nn.forward(self.sensors)
+        #if self.modular_weights:
+        #    w_mod = np.tile(self.weights, (self.num_neighbours, 1))
+        #    self.actions = np.dot(self.sensors, w_mod) + self.bias
+        #else:
+        #    self.actions = np.dot(self.sensors, self.weights) + self.bias
 
     def takeAction(self):
         #next_angle = self.angle + self.actions[0] 

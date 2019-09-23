@@ -268,14 +268,14 @@ class PetriDish:
             #col = [neighbs[i]/max_col*255.0, 0.0, 0.0]
             #print(col)
             # body of robot
-            try:
-                pygame.draw.ellipse(self.screen, col, [x-rad_base, y-rad_base, rad_base*2, rad_base*2], 3)
+            #try:
+            pygame.draw.ellipse(self.screen, col, [x-rad_base, y-rad_base, rad_base*2, rad_base*2], 3)
             # sensory range of robot
-                if self.visuals['draw_radius']:
-                    pygame.draw.ellipse(screen, (240, 240, 240), [x-rad_view, y-rad_view, rad_view*2, rad_view*2], 3)
-            except:
-                print("BBBB!!", x, y, rad_view, rad_base)
-                print(r.vel_x, r.vel_y, a, ns, r.weights, r.bias, r.sensors, r.actions)
+            if self.visuals['draw_radius']:
+                pygame.draw.ellipse(self.screen, (240, 240, 240), [x-rad_view, y-rad_view, rad_view*2, rad_view*2], 3)
+            #except:
+            #    print("BBBB!!", x, y, rad_view, rad_base)
+            #    print(r.vel_x, r.vel_y, a, ns, r.weights, r.bias, r.sensors, r.actions)
             # draw direction of robot
             pygame.draw.line(self.screen, col, [x, y], [x + line_size*np.cos(a), y + line_size*np.sin(a)], 1)
 

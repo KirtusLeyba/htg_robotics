@@ -31,3 +31,4 @@ TODO features:
 3. <del> Fitness-dependent gene-transfer. </del>
 4. Fitness-proportional gene-selection (see 'HTGmethods.py').
 5. It's very inefficient in python to have each robot be its own class object if we want to perform operations on groups of individuals. Create a population class which tracks the parameters of the population in vectors to make use on NumPy.
+6. Make it clear that 'selectGeneSpacialCorrelation' is not a usable gene transfer method.

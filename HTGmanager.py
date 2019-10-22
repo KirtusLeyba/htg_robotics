@@ -118,7 +118,6 @@ class HtgManager:
         min_fitness = np.min(self.fitnesses)
         max_fitness = np.max(self.fitnesses)
         avg_fitness = np.mean(self.fitnesses)
-        print('min: {}, max: {}, avg: {}'.format(min_fitness, max_fitness, avg_fitness))
         # select robots to diffuse.
         diffuse_idxs = self.fitness_selection_method(self.fitnesses)
         # diffuse.

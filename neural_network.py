@@ -2,17 +2,26 @@ import numpy as np
 
 class NeuralNetwork:
 
-    def __init__(self, layers, activation=np.tanh):
+    def __init__(self, layers, activation=np.tanh, isInt=False):
         '''
         Just your simple, standard NN.
         '''
 
-        self.weights = [
-                np.random.randn(l1,l2) for l1,l2 in zip(layers[:-1], layers[1:])
-                ]
-        self.biases = [
-                np.random.randn(b) for b in layers[1:]
-                ]
+        if(not isInt):
+            self.weights = [
+                    np.random.randn(l1,l2) for l1,l2 in zip(layers[:-1], layers[1:])
+                    ]
+            self.biases = [
+                    np.random.randn(b) for b in layers[1:]
+                    ]
+        else:
+
+            self.weights = [
+                    np.random.choice([-2,-1,0,1,2], size = (l1,l2)) for l1,l2 in zip(layers[:-1], layers[1:])
+                    ]
+            self.biases = [
+                    np.random.choice([-2,-1,0,1,2], size = (b)) for b in layers[1:]
+                    ]
         self.activations = [activation]*len(self.weights)
 
     def forward(self, x):
@@ -51,18 +60,23 @@ class NeuralNetwork:
 
 class NeuralNetworkModular(NeuralNetwork):
 
-    def __init__(self, layers, num_modules, activation=np.tanh):
+    def __init__(self, layers, num_modules, activation=np.tanh, isInt=False):
         '''
         A flippin' standard NN but with modular structure so that (input)
             channels share the same weights.
         '''
-        super().__init__(layers, activation)
+        super().__init__(layers, activation, isInt)
         self.num_modules = num_modules
 
         # recreate the bias, as it shouldn't be modular.
-        self.biases = [
-                np.random.randn(b*self.num_modules) for b in layers[1:-1]
-                ]
+        if(not isInt):
+            self.biases = [
+                    np.random.randn(b) for b in layers[1:]
+                    ]
+        else:
+            self.biases = [
+                    np.random.choice([-2,-1,0,1,2], size = (b)) for b in layers[1:]
+                    ]
         self.biases.append(np.random.randn(layers[-1]))
 
     def forward(self, x):

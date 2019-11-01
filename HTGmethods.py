@@ -52,3 +52,8 @@ def flatMutate(genes, m):
 	#	if(np.random.random() < m):
 	#		genes[i] = np.random.random()*2.0 - 2.0
 	#return genes
+
+def intMutate(genes, m):
+    mutation_outcome = (np.random.random(*np.shape(genes)) < m).astype(float)
+    genes_next = mutation_outcome*(np.random.choice([-2, -1, 0, 1, 2], size=np.shape(genes)))
+    return genes_next

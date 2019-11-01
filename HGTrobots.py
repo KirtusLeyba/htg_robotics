@@ -74,12 +74,14 @@ class robot:
             self.nn = NeuralNetworkModular(
                     layers=layers,
                     num_modules=self.num_neighbours,
-                    activation=nn_info['activation']
+                    activation=nn_info['activation'],
+                    isInt = nn_info["integerWeights"]
                     )
         else:
             self.nn = NeuralNetwork(
                     layers=layers,
-                    activation=nn_info['activation']
+                    activation=nn_info['activation'],
+                    isInt = nn_info["integerWeights"]
                     )
 
         self.ID = ID

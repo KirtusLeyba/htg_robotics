@@ -12,6 +12,7 @@ class HtgManager:
             max_vel=4.0, sense_radius=50.0,
             num_neighbours=5, diffuse_rate=10,
             act_rate=1,
+            intGenes=False,
             nn_info={
                 'hidden_layers' : [],
                 'activation'    : lambda x : x,
@@ -44,7 +45,10 @@ class HtgManager:
 
         self.pop_size = pop_size
         self.pop = []
-        self.randomisePopulation()
+        if(not intGenes):
+            self.randomisePopulation()
+        else:
+            self.randomizePopulationInt()
 
         self.htg_method = htg_method
         self.task = task
@@ -63,6 +67,24 @@ class HtgManager:
 
 
     def randomisePopulation(self):
+        self.pop = []
+        for p in range(self.pop_size):
+            r = robot(
+                    x = np.random.randint(self.boundary_x),
+                    y = np.random.randint(self.boundary_y),
+                    #r = 20.0, #np.random.rand()*np.pi*2.0,
+                    r = self.sense_radius, #np.random.rand()*np.pi*2.0,
+                    n = self.num_neighbours, #self.pop_size,
+                    maxV = self.max_vel,
+                    boundary_x = self.boundary_x,
+                    boundary_y = self.boundary_y,
+                    ID = p,
+                    nn_info = self.nn_info
+                    )
+            #r.weights = np.random.randn(*np.shape(r.weights))
+            self.pop.append(r)
+
+    def randomisePopulationInt(self):
         self.pop = []
         for p in range(self.pop_size):
             r = robot(

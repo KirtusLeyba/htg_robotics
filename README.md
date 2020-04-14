@@ -1,4 +1,4 @@
-# Microbiobots: gene transfer and evolution in a genetically diverse robot swarm population#
+# Microbiobots: gene transfer and evolution in a genetically diverse robot swarm population #
 Team members: Levi Fussell<sup>1</sup>, Kirtus Leyba<sup>2</sup>, Jessica A Lee <sup>3,4</sup>, and Anshuman Swain <sup>5</sup>
 
 <sup>1</sup> School of Informatics, University of Edinburgh, UK
@@ -8,7 +8,7 @@ Team members: Levi Fussell<sup>1</sup>, Kirtus Leyba<sup>2</sup>, Jessica A Lee 
 <sup>5</sup> Department of Biology, University of Maryland, College Park, MD 20742, USA
 
 
-## Introduction##
+## Introduction ##
 Algorithms that implement information exchange and the optimization of computational processes find a particularly interesting use case in distributed, asynchronous systems with constraints on communication and computational capabilities. There are many instances where such challenges must be addressed, such as the consensus of values in networks with tenuous or even adversarial connections (Pasqualetti, Bicchi, & Bullo, 2011), or the coverage of an environment by mobile autonomous vehicles (Cortes, Martinez, Karatas, & Bullo, 2004). It has been shown that many distributed tasks can be unified as the optimization of a specialized form of a more fundamental cost function (Schwager, Rus, & Slotine, 2011). 
 
 The coordination and collective behavior of simplistic robotic agents comes with the potential for robust, affordable, and adaptable systems. These challenges fall under the active research field of swarm robotics. Past work has shown that probabilistic models can be adapted to useful control schemes. For example, a swarm might effectively transport objects larger than any single member (Wilson et al., 2014). While not generally thought of as swarm robots, the related self-organizing particle systems have been shown to effectively optimize various cost functions to achieve a desired behavior even in completely distributed and asynchronous settings. Such behaviors include but are not limited to compression and expansion (Cannon, Daymude, Randall, & Richa, 2016), leader election (Daymude, Gmyr, Richa, Scheideler, & Strothmann, 2017), and universal coating (Daymude et al., 2018). 
@@ -37,13 +37,13 @@ The goal of a robot is called the fitness function and is defined at the individ
 A robot passes genetic material to another robot via the horizontal gene transfer (HTG) algorithm. HTG is done every ![$\tau_H$](https://render.githubusercontent.com/render/math?math=%24%5Ctau_H%24) timesteps, and some robots select an individual ![$p_k \in neighb(p_i)$](https://render.githubusercontent.com/render/math?math=%24p_k%20%5Cin%20neighb(p_i)%24) uniformly at random. Then a gene subsequence ![$q(p_i) = p^({l:(l+m)})_i$](https://render.githubusercontent.com/render/math?math=%24q(p_i)%20%3D%20p%5E(%7Bl%3A(l%2Bm)%7D)_i%24) is chosen where ![$l \sim \[0, H-k\]$](https://render.githubusercontent.com/render/math?math=%24l%20%5Csim%20%5B0%2C%20H-k%5D%24) and ![$0 > m < H$](https://render.githubusercontent.com/render/math?math=%240%20%3E%20m%20%3C%20H%24) is a subsequence size chosen from some predefined range. Note that ![$l:(l+m)$](https://render.githubusercontent.com/render/math?math=%24l%3A(l%2Bm)%24) indicates splicing operation of an array. This subsequence is then inserted into ![$p_k$](https://render.githubusercontent.com/render/math?math=%24p_k%24) at the index ![$l$](https://render.githubusercontent.com/render/math?math=%24l%24), replacing the elements of the array in ![$l:(l+m)$](https://render.githubusercontent.com/render/math?math=%24l%3A(l%2Bm)%24) such that ![$p^({l:(l+m)})_k = q(p_i)$](https://render.githubusercontent.com/render/math?math=%24p%5E(%7Bl%3A(l%2Bm)%7D)_k%20%3D%20q(p_i)%24). The robots that perform HTG are selected in the same way individuals are selected in genetic algorithms (GAs), so there are a range of methods to choose from. For now, we settle on using fitness-proportional selection.
 
 
-##Experiments ##
+## Experiments ##
 
 Here we present the results of our initial experiment with this model system: a swarm aggregation task (Bayındır, 2016) - a classic task in swarm robotics. We discuss the results of a single evolution experiment, but these results are typical and reproducible. We examined not only the evolution of the system as a whole and its ability to perform task at the population (swarm) level, but also the evolutionary dynamics of the individuals and their genomes, using methods from ecology and population genetics. Note that there are some key differences between this system and a typical biological system: robots are ’immortal,’ and the population size does not change.
 
 
-## Results and Discussion##
-###Robot swarm performance###
+## Results and Discussion ##
+### Robot swarm performance ###
 Our robot population evolved successfully toward increased fitness: mean fitness of the group reached a value of approximately 0.8 after 5,000 iterations and remained at that plateau (Fig. 1) Robot fitness is defined on the basis of the robot’s performance at the aggregation task; More formally, the fitness function for aggregation is, ![$f_i = \frac{1}{N}\sum_{j=1}^N ((x(p_j)-x(p_i))^2 + (y(p_j)-y(p_i))^2)$](https://render.githubusercontent.com/render/math?math=%24f_i%20%3D%20%5Cfrac%7B1%7D%7BN%7D%5Csum_%7Bj%3D1%7D%5EN%20((x(p_j)-x(p_i))%5E2%20%2B%20(y(p_j)-y(p_i))%5E2)%24) ) and can be interpreted as the normalized number of neighbors that a robot has.
 
 
@@ -55,7 +55,7 @@ While the population average fitness never increased above 0.9, the population c
 ![alt text](imgs/images/robot_fitness.jpg)
 **Figure 2**: Distribution of fitness values across the population shown as a heatmap, where color indicates the abundance of robots with a given fitness value. Note that fitness only ever takes values of 0, 0.2 0.4, 0.6, 0.8, or 1.
 
-###Genome dynamics###
+### Genome dynamics ###
 Because genes in our system represent weights in a neural network, they take numeric values (in contrast to biological genes, which code for proteins and - for the most part - cannot be considered quantitative). At the outset of the study we did not know what values to expect at each gene to take in an evolved population, and how evolutionary trajectories would differ among the different genes. Fig. 3 shows the values of genes at the beginning and end of evolution. At the start of the simulation, alleles were assigned randomly, evenly distributed between -3 and 3. We found that by the end of evolution, most genes had evolved toward negative values. There is little difference among the values taken by the different genes (though we have not yet done extensive statistical analyses). Note also that some allele values have many lines going through them, indicating that some alleles are present in many robots - likely the result of gene exchange among robots. One clear exception to these observations is at genes 12 and 13; these two genes do not show any change after evolution. Gene locus 12 refers to the binary value indicating whether a robot is present in the sensor. Therefore, test case that we are using has the robots always interacting and their neighborhood always contains the maximum number of robots, which may explain the lack of selection or exchange at that gene. Locus 13 is the bias associated with the velocity of the robot; it is possible that there is no selection on this gene because robot velocity is always at maximum velocity.
 
 
@@ -80,7 +80,7 @@ To visualize the changes in allele abundance during the entire course of evoluti
 ![alt text](imgs/images/locus13_plot.jpg)
 **Figure 6**: Plots similar to those for the previous figure, but for loci 12 and 13.
 
-##Future Work##
+## Future Work ##
 Our plans for future work on this system include: 
 1. Statistical analysis on multiple replicate runs of the model, which may offer better insight into the differences in function and evolution among different genes 
 2. Testing the effect of modifications to the evolutionary process, such as the fitness requirements for gene exchange, the rules governing which neighbors may exchange genes, and how mutation happens 
@@ -90,10 +90,10 @@ Our plans for future work on this system include:
 
 We aim to use this system not only to address challenges in evolutionary swarm robotics but also to study evolution in a novel artificial life system.
 
-##Acknowledgements##
+## Acknowledgements ##
 We would like to thank Santa Fe Institute (SFI) for helping us come together and work on this project at the Complex Systems Summer School (CSSS) 2019.
 
-##Hands-on##
+## Hands-on ##
 If you want to run these experiments by yourself, the complete code is available on this repository. Below is a detailed description of how to do it. Please feel to reach out to us if you need any help.
 
 ### Dependencies ###

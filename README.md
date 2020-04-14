@@ -1,5 +1,5 @@
 # Microbiobots: gene transfer and evolution in a genetically diverse robot swarm population #
-Team members: Levi Fussell<sup>1</sup>, Kirtus Leyba<sup>2</sup>, Jessica A Lee<sup>3,4</sup>, and Anshuman Swain<sup>5</sup>
+**Team members:** Levi Fussell<sup>1</sup>, Kirtus Leyba<sup>2</sup>, Jessica A Lee<sup>3,4</sup>, and Anshuman Swain<sup>5</sup>
 
 <sup>1</sup>School of Informatics, University of Edinburgh, UK;
 <sup>2</sup>Biodesign Institute, Arizona State University, Tempe, AZ 85281, USA;

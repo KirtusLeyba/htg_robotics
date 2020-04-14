@@ -114,3 +114,24 @@ You will also want to make your own custom HTG Method which defines how genes ar
 
 * Move mouse over a robot to display its ID number and position.
 * Data is saved in the '/outputs' directory as a '.csv' file, with a file name similar to your experiment name.
+
+## References ##
+
+1. Bayındır, L. (2016). A review of swarm robotics tasks. Neurocomputing, 172 , 292–321. 
+2. Cannon, S., Daymude, J. J., Randall, D., & Richa, A. W. (2016). A markov chain algorithm for compression in self-organizing particle systems. In Proceedings of the 2016 acm symposium on principles of distributed computing (pp. 279–288). 
+3. Cortes, J., Martinez, S., Karatas, T., & Bullo, F. (2004). Coverage control for mobile sensing networks. IEEE Transactions on robotics and Automation, 20 (2), 243–255. 
+4. Daymude, J. J., Derakhshandeh, Z., Gmyr, R., Porter, A., Richa, A. W., Scheideler, C., & Strothmann, T. (2018). On the runtime of universal coating for programmable matter. Natural Computing, 17 (1), 81–96. 
+5. Daymude, J. J., Gmyr, R., Richa, A. W., Scheideler, C., & Strothmann, T. (2017). Improved leader election for self-organizing programmable matter. In International symposium on algorithms and experiments for sensor systems, wireless networks and distributed robotics (pp. 127–140). 
+6. Gaier, A., & Ha, D. (2019). Weight agnostic neural networks. arXiv preprint arXiv:1906.04358 . 
+7. Hecker, J. P., & Moses, M. E. (2015). Beyond pheromones: evolving error-tolerant, flexible, and scalable ant-inspired robot swarms. Swarm Intelligence, 9 (1), 43–70.
+8. Nebro, A. J., Durillo, J. J., Luna, F., Dorronsoro, B., & Alba, E. (2009). Mocell: A cellular genetic algorithm for multiobjective optimization. International Journal of Intelligent Systems, 24 (7), 726–746. 
+9. Papke, R. T., & Gogarten, J. P. (2012). How bacterial lineages emerge. Science, 336 (6077), 45–46. 
+10. Pasqualetti, F., Bicchi, A., & Bullo, F. (2011). Consensus computation in unreliable networks: A system theoretic approach. IEEE Transactions on Automatic Control, 57 (1), 90–104. 
+11. Schwager, M., Rus, D., & Slotine, J.-J. (2011). Unifying geometric, probabilistic, and potential field approaches to multi-robot deployment. The International Journal of Robotics Research, 30 (3), 371– 383. 
+12. Soucy, S. M., Huang, J., & Gogarten, J. P. (2015). Horizontal gene transfer: building the web of life. Nature Reviews Genetics, 16 (8), 472–482. 
+13. Stanley, K. O., & Miikkulainen, R. (2002). Evolving neural networks through augmenting topologies. Evolutionary computation, 10 (2), 99–127. 
+14. Swithers, K. S., Soucy, S. M., & Gogarten, J. P. (2012). The role of reticulate evolution in creating innovation and complexity. International journal of evolutionary biology, 2012 . 
+15. Tatum, E., & Lederberg, J. (1947). Gene recombination in the bacterium escherichia coli. Journal of bacteriology, 53 (6), 673. 
+16. Williams, D., Gogarten, J. P., & Papke, R. T. (2012). Quantifying homologous replacement of loci between haloarchaeal species. Genome biology and evolution, 4 (12), 1223–1244. 
+17. Wilson, S., Pavlic, T. P., Kumar, G. P., Buffin, A., Pratt, S. C., & Berman, S. (2014). Design of antinspired stochastic control policies for collective transport by robotic swarms. Swarm Intelligence, 8 (4), 303–327.
+
